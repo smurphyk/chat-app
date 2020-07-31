@@ -3,20 +3,29 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import startScreen from './components/startScreen';
-import chatScreen from './components/chatScreen';
+import StartScreen from './components/StartScreen';
+import ChatScreen from './components/ChatScreen';
 
+// Create stack navigator
 const Stack = createStackNavigator();
 
-export default class ChatApp extends Component() {
+export default class ChatApp extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="startScreen">
-          <Stack.Screen name="startScreen" component={startScreen} />
-          <Stack.Screen name="chatScreen" component={chatScreen} />
+        <Stack.Navigator initialRouteName="StartScreen">
+          <Stack.Screen name="StartScreen" component={StartScreen} />
+          <Stack.Screen name="ChatScreen" component={ChatScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  NavigationContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
