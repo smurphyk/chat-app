@@ -1,5 +1,6 @@
-import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, TextInput, ImageBackground, TouchableOpacity } from 'react-native';
+
 
 
 export default class Start extends React.Component {
@@ -14,14 +15,14 @@ export default class Start extends React.Component {
         '#474056',
         '#8A95A5',
         '#B9C6AE'
-      ]
-    };
+      ],
+    }
   }
 
   render() {
-    const { name, colors, colorChoice } = this.state;
+    const { nameText, colors, colorChoice } = this.state;
     return (
-      <ImageBackground source={require('../assets/Background.png')} style={styles.image}>
+      <ImageBackground source={require('../assets/BackgroundImage.png')} imageStyle={styles.background}>
         <Text style={styles.title}>ChatterBox</Text>
         <View style={styles.startContainer}>
           <View style={styles.searchBox}>
@@ -66,6 +67,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  background: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   startContainer: {
     width: '90%',
     height: '45%',
@@ -78,7 +87,7 @@ const styles = StyleSheet.create({
     color: '#757083',
     width: 300,
     padding: 18,
-    opacity: 0.8
+    opacity: 0.8,
   },
   button: {
     backgroundColor: '#757083',
@@ -93,14 +102,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     color: '#fff'
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   title: {
     fontSize: 45,
