@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, TextInput, ImageBackground, TouchableOpacity } from 'react-native';
 
 
@@ -7,6 +7,7 @@ export default class Start extends React.Component {
   constructor(props) {
     super(props);
 
+    // Set initial state for start screen functionality
     this.state = {
       nameText: '',
       colorChoice: '',
@@ -20,16 +21,21 @@ export default class Start extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
     const { nameText, colors, colorChoice } = this.state;
     return (
-      <ImageBackground source={require('../assets/BackgroundImage.png')} imageStyle={styles.background}>
+      // Set the background as the image provided in assets
+      <ImageBackground source={require('../assets/BackgroundImage.png')} style={styles.background} imageStyle={{ resizeMode: 'cover' }}>
         <Text style={styles.title}>ChatterBox</Text>
         <View style={styles.startContainer}>
           <View style={styles.searchBox}>
             <TextInput
               style={styles.input}
+              // Any change in the name field is stored as the state, allows adding
+              // name to chat screen
               onChangeText={(nameText) => this.setState({ nameText })}
               value={this.state.nameText}
+              // React-native feature to include accessibility easily
               accessible={true}
               accessibilityLabel='Input name here'
               placeholder='Your Name'
@@ -38,6 +44,7 @@ export default class Start extends React.Component {
           <Text style={styles.choose}>
             Choose Background Color:
           </Text>
+          {/* Create buttons for user to choose background color */}
           <View style={styles.colors}>
             {colors.map(color => (
               <View style={[styles.colorBorder,
@@ -50,8 +57,9 @@ export default class Start extends React.Component {
               </View>
             ))}
           </View>
-          <TouchableOpacity onPress={() => this.props.navigate('Chat', { nameText, color: colorChoice })}
-            style={[styles.button]}>
+          {/* Give chat button navigation and pass name and color as props */}
+          <TouchableOpacity onPress={() => navigation.navigate('Chat', { name: nameText, color: colorChoice })}
+            style={styles.button}>
             <Text style={styles.buttonText}>
               Start Chatting
             </Text>
@@ -68,11 +76,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   background: {
+    flex: 1,
     width: '100%',
     height: '100%',
-    flex: 1,
     resizeMode: 'cover',
     justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 45,
+    fontWeight: '600',
+    color: '#fff',
+    alignItems: 'center',
+    flex: 1,
+    marginTop: 100,
     alignItems: 'center'
   },
   startContainer: {
@@ -80,14 +97,7 @@ const styles = StyleSheet.create({
     height: '45%',
     backgroundColor: '#fff',
     marginBottom: 20,
-    alignItems: 'flex-start'
-  },
-  input: {
-    fontSize: 16,
-    color: '#757083',
-    width: 300,
-    padding: 18,
-    opacity: 0.8,
+    alignItems: 'flex-start',
   },
   button: {
     backgroundColor: '#757083',
@@ -97,18 +107,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    height: 50
+    height: 60,
   },
   buttonText: {
     fontSize: 16,
+    fontWeight: '600',
     color: '#fff'
-  },
-  title: {
-    fontSize: 45,
-    alignItems: 'center',
-    flex: 1,
-    marginTop: 130,
-    alignItems: 'center'
   },
   searchBox: {
     width: '90%',
@@ -116,14 +120,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#757083',
-    margin: '15 30 20 13',
     paddingLeft: 13,
+    marginLeft: 20,
+    marginTop: 15,
+    marginBottom: 30,
+  },
+  input: {
+    fontSize: 16,
+    fontWeight: '300',
+    color: '#757083',
+    width: '90%',
+    padding: 18,
+    opacity: 0.5,
+    borderColor: '#757083',
   },
   choose: {
     fontSize: 18,
     color: '#757083',
-    opacity: 0.8,
-    marginLeft: 20
+    marginLeft: 20,
+    marginTop: 10,
   },
   colors: {
     flex: 4,
@@ -131,12 +146,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     width: '70%',
-    margin: 20
+    marginLeft: 20,
+    marginTop: 5,
   },
   colorButton: {
     height: 45,
     width: 45,
-    borderRadius: 20
+    borderRadius: 50
   },
   colorBorder: {
     justifyContent: 'center',

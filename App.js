@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -12,6 +11,7 @@ const Stack = createStackNavigator();
 export default class ChatApp extends Component {
   render() {
     return (
+      // Container that will set the initial state and control navigation
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Start">
           <Stack.Screen name="Start" component={Start} />
@@ -21,11 +21,3 @@ export default class ChatApp extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
