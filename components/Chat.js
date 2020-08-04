@@ -18,7 +18,7 @@ export default class Chat extends React.Component {
       messages: [
         {
           _id: 1,
-          text: 'Hey, ' + this.props.route.params.name + '! Welcome to the ChatterBox!',
+          text: 'Welcome, master ' + this.props.route.params.name + '! Thank you for developing me!',
           createdAt: new Date(),
           user: {
             _id: 2,
@@ -43,7 +43,7 @@ export default class Chat extends React.Component {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#00e0ca'
+            backgroundColor: '#267a2e',
           },
           left: {
             backgroundColor: '#e8091c'
