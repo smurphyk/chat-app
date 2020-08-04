@@ -37,7 +37,8 @@ export default class Start extends React.Component {
               value={name}
               // React-native feature to include accessibility easily
               accessible={true}
-              accessibilityLabel='Input name here'
+              accessibilityLabel='Name'
+              accessibilityHint='Enter your name in this input field'
               placeholder='Your Name'
             />
           </View>
