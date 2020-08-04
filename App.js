@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-//Causing an error, but still works
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import Start from './components/Start';
 import Chat from './components/Chat';

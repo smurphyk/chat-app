@@ -1,25 +1,24 @@
-import React from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import React, { Component } from 'react';
+import { StyleSheet, View, TextInput, Platform } from 'react-native';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
 export default class Chat extends React.Component {
   constructor(props) {
     super(props);
 
-    // Set default state for adding text field functionality
     this.state = {
-      text: '',
-      messages: []
+      messages: [],
     }
   }
 
   // Creates format for all messages
   componentDidMount() {
+    //Creates static messages for the sake of the exercise
     this.setState({
       messages: [
         {
           _id: 1,
-          text: 'Hello developer',
+          text: 'Hey, ' + this.props.route.params.name + '! Welcome to the ChatterBox!',
           createdAt: new Date(),
           user: {
             _id: 2,
@@ -28,13 +27,30 @@ export default class Chat extends React.Component {
           },
         },
         {
-          _id: 2,
-          text: 'This is a system message',
+          _id: 3,
+          text: this.props.route.params.name + ' is here to chat!',
           createdAt: new Date(),
           system: true,
         },
       ],
     })
+  }
+
+  // Customizes the color of the text bubbles
+  renderBubble(props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: '#00e0ca'
+          },
+          left: {
+            backgroundColor: '#e8091c'
+          }
+        }}
+      />
+    )
   }
 
   // Allows messages to be appended to the state's messages object
@@ -46,7 +62,7 @@ export default class Chat extends React.Component {
 
   render() {
     // Define props passed from start
-    const { name, color } = this.props.route.params;
+    const { name, color, } = this.props.route.params;
     const { messages } = this.state;
 
     // Fallback in case no name is entered on start screen
@@ -57,27 +73,16 @@ export default class Chat extends React.Component {
 
     return (
       // Creates Gifted Chat interface with keyboard spacer for android
-      <View style={styles.container}>
+      <View style={{ flex: 1, justifyContent: 'center', backgroundColor: color }}>
         <GiftedChat
+          renderBubble={this.renderBubble.bind(this)}
           messages={messages}
           onSend={messages => this.onSend(messages)}
           user={{
             _id: 1,
           }}
         />
-        {Platform.OS === 'android' ? <KeyboardSpacer /> : null}
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  input: {
-    borderWidth: 2,
-    borderColor: '#757083',
-    padding: 7,
-  }
-})
