@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import firebase from 'firebase';
-import 'firebase/firestore';
+
+const firebase = require('firebase');
+require('firebase/firestore');
 
 export default class Chat extends React.Component {
   constructor(props) {
@@ -21,15 +22,9 @@ export default class Chat extends React.Component {
       })
     }
 
-    this.referenceMessages = firebase.firestore().collection('messages')
-
     this.state = {
       messages: [],
-      user: {
-        _id: '',
-        name: '',
-        avatar: '',
-      },
+      user: {},
       uid: 0
     };
   }
@@ -46,6 +41,8 @@ export default class Chat extends React.Component {
         loggedInText: "Welcome to the ChatterBox! The first rule of ChatterBox is: You MUST talk about ChatterBox...or anything else."
       });
 
+      // Retrieve user's messages
+      this.referenceMessages = firebase.firestore().collection('messages')
       // Update collection with new messages
       this.unsubscribe = this.referenceMessages.onSnapshot(this.onCollectionUpdate);
     });
@@ -66,7 +63,7 @@ export default class Chat extends React.Component {
     const messages = [];
     // Map through all documents and retrieve data
     querySnapshot.forEach(doc => {
-      let data = doc.data();
+      var data = doc.data();
       messages.push({
         _id: data._id,
         text: data.text,
@@ -81,12 +78,11 @@ export default class Chat extends React.Component {
 
   // Add new messages to database for later retrieval
   addMessage() {
-    const message = this.state.messages[0];
     this.referenceMessages.add({
-      _id: message._id,
-      text: message.text,
-      createdAt: message.createdAt,
-      user: message.user,
+      _id: this.state.messages[0]._id,
+      text: this.state.messages[0].text,
+      createdAt: this.state.messages[0].createdAt,
+      user: this.state.messages[0].user,
       uid: this.state.uid,
     });
   }
@@ -106,7 +102,6 @@ export default class Chat extends React.Component {
   // Close connection when app is closed
   componentWillUnmount() {
     this.authUnsubscribe();
-    this.unsubscribe();
   }
 
   // Customizes the color of the text bubbles
@@ -129,7 +124,7 @@ export default class Chat extends React.Component {
   render() {
     // Define props passed from start
     const { name, color, } = this.props.route.params;
-    const { messages } = this.state;
+    const { messages, uid } = this.state;
 
     // Populates user's name, if entered
     this.props.navigation.setOptions({ title: name });
@@ -141,7 +136,10 @@ export default class Chat extends React.Component {
           renderBubble={this.renderBubble.bind(this)}
           messages={messages}
           onSend={messages => this.onSend(messages)}
-          user={messages.user}
+          user={{
+            _id: uid,
+            name: name,
+          }}
         />
       </View>
     )
