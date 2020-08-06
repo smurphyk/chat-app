@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-
-const firebase = require('firebase');
-require('firebase/firestore');
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 export default class CustomActions extends React.Component {
   // Define functionality of action button
