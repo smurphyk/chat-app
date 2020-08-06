@@ -65,7 +65,7 @@ export default class Chat extends React.Component {
       messages: [
         {
           _id: 1,
-          text: this.props.route.params.name + ' is here to chat!',
+          text: `${this.props.route.params.name} is here to chat!`,
           createdAt: new Date(),
           system: true,
         }
