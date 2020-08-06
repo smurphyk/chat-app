@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, AsyncStorage, YellowBox } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import NetInfo from '@react-native-community/netinfo';
+import MapView from 'react-native-maps';
+import CustomActions from './CustomActions';
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -30,21 +32,11 @@ export default class Chat extends React.Component {
       messages: [],
       user: {},
       uid: 0,
-      isConnected: false
+      isConnected: false,
+      image: null,
+      location: null
     };
   }
-
-  async getMessages() {
-    let messages = '';
-    try {
-      messages = await AsyncStorage.getItem('messages') || [];
-      this.setState({
-        messages: JSON.parse(messages)
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
 
   async componentDidMount() {
     // Check whether user is on or offline
@@ -78,8 +70,22 @@ export default class Chat extends React.Component {
           system: true,
         }
       ]
-    })
+    });
+    // Resolves timer warning on Android; Firebase working on better fix
+    YellowBox.ignoreWarnings(['Setting a timer']);
   }
+
+  async getMessages() {
+    let messages = '';
+    try {
+      messages = await AsyncStorage.getItem('messages') || [];
+      this.setState({
+        messages: JSON.parse(messages)
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   // Query for stored messages
   onCollectionUpdate = querySnapshot => {
@@ -92,6 +98,8 @@ export default class Chat extends React.Component {
         text: data.text,
         createdAt: data.createdAt.toDate(),
         user: data.user,
+        image: data.image,
+        location: data.location
       });
     });
     this.setState({
@@ -120,15 +128,17 @@ export default class Chat extends React.Component {
 
   // Add new messages to database for later retrieval
   addMessage(message) {
-    const { _id, createdAt, text, user } = message[0];
+    const { _id, createdAt, text, user, image, location } = message[0];
     this.referenceMessages.add({
       _id: _id,
       createdAt: createdAt,
-      text: text,
+      text: text || null,
       user: {
         _id: user._id,
         name: user.name
-      }
+      },
+      image: image || null,
+      location: location || null
     })
   }
 
@@ -141,8 +151,7 @@ export default class Chat extends React.Component {
     }
   }
 
-  // Allows messages in local storage to be deleted for development purposes
-  // DELETE THIS FOR PRODUCTION BUILD, SEAN. DON'T FORGET, OR YOU'LL LOOK STUPID.
+  // Allows messages in local storage to be deleted
   async deleteMessages() {
     try {
       await AsyncStorage.removeItem('messages');
@@ -158,7 +167,7 @@ export default class Chat extends React.Component {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#267a2e',
+            backgroundColor: '#246e50',
           },
           left: {
             backgroundColor: '#e8091c'
@@ -179,6 +188,35 @@ export default class Chat extends React.Component {
     }
   }
 
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      const longitude = parseInt(currentMessage.location.longitude);
+      const latitude = parseInt(currentMessage.location.latitude);
+      return (
+        <MapView
+          style={{
+            width: 150,
+            height: 100,
+            borderRadius: 13,
+            margin: 3
+          }}
+          region={{
+            longitude,
+            latitude,
+            longitudeDelta: 0.0421,
+            latitudeDelta: 0.0922,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
   render() {
     // Define props passed from start
     const { name, color, } = this.props.route.params;
@@ -194,6 +232,8 @@ export default class Chat extends React.Component {
           renderBubble={this.renderBubble.bind(this)}
           renderInputToolbar={this.renderInputToolbar}
           messages={messages}
+          renderCustomView={this.renderCustomView}
+          renderActions={this.renderActions}
           onSend={messages => this.onSend(messages)}
           user={{
             _id: uid,
@@ -204,3 +244,12 @@ export default class Chat extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    padding: 40
+  }
+})
