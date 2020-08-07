@@ -1,4 +1,4 @@
-# ChatterBox :android:
+# ChatterBox
 A react native application built using Expo's gifted-chat and Google Firebase to create a chat app that runs in real-time, for Android and iOS.
 ## Getting Started
 
