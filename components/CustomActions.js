@@ -9,7 +9,7 @@ import 'firebase/firestore';
 
 export default class CustomActions extends React.Component {
   /**
-   * Returns the user's selected action from the options
+   * Returns the action selected by the user, from the options
    * @function onActionPress
    */
   onActionPress = () => {
