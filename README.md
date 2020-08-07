@@ -111,3 +111,6 @@ Open the Expo app on your Android device, navigate to the user icon in the botto
 Open the camera app and focus it on the QR code that was generated in the terminal and the Metro Bundler in the browser.
 
 The app will open, the user will enter their name, choose a background color for the chat screen, and get to chatting!
+
+**KANBAN BOARD**
+https://trello.com/b/spuZnsVT/react-native-chat-app
