@@ -6,7 +6,6 @@ export default class Start extends React.Component {
   constructor(props) {
     super(props);
 
-    // Set initial state for start screen functionality
     this.state = {
       name: '',
       colorChoice: '',
@@ -23,18 +22,14 @@ export default class Start extends React.Component {
     const { navigation } = this.props;
     const { name, colors, colorChoice } = this.state;
     return (
-      // Set the background as the image provided in assets
       <ImageBackground source={require('../assets/BackgroundImage.png')} style={styles.background} imageStyle={{ resizeMode: 'cover' }}>
         <Text style={styles.title}>ChatterBox</Text>
         <View style={styles.startContainer}>
           <View style={styles.searchBox}>
             <TextInput
               style={styles.input}
-              // Any change in the name field is stored as the state, allows adding
-              // name to chat screen
               onChangeText={(name) => this.setState({ name })}
               value={name}
-              // React-native feature to include accessibility easily
               accessible={true}
               accessibilityLabel='Name'
               accessibilityHint='Enter your name in this input field'
@@ -44,7 +39,6 @@ export default class Start extends React.Component {
           <Text style={styles.choose}>
             Choose Background Color:
           </Text>
-          {/* Create buttons for user to choose background color */}
           <View style={styles.colors}>
             {colors.map(color => (
               <View style={[styles.colorBorder,
@@ -57,7 +51,6 @@ export default class Start extends React.Component {
               </View>
             ))}
           </View>
-          {/* Give chat button navigation and pass name and color as props */}
           <TouchableOpacity onPress={() => navigation.navigate('Chat', { name: name, color: colorChoice })}
             style={styles.button}>
             <Text style={styles.buttonText}>

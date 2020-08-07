@@ -5,13 +5,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Start from './components/Start';
 import Chat from './components/Chat';
 
-// Create stack navigator
+/**
+ * Implements navigation between screens
+ * Start screen returned on initial load
+ */
+
 const Stack = createStackNavigator();
 
 export default class ChatApp extends Component {
   render() {
     return (
-      // Container that will set the initial state and control navigation
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Start">
           <Stack.Screen name="Start" component={Start} />
